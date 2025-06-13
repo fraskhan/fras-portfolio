@@ -5,40 +5,28 @@ import {
   Heading,
   Text,
   SimpleGrid,
-  Icon,
+  Stack,
+  List,
+  ListItem,
+  ListIcon,
+  Divider,
+  Flex,
 } from '@chakra-ui/react';
+import { CheckCircleIcon } from '@chakra-ui/icons';
 import 'boxicons/css/boxicons.min.css';
 
 const About = () => {
-  const bgColor = 'white';
   const textColor = 'gray.600';
-  const cardBg = 'gray.50';
 
-  const features = [
-    {
-      icon: 'bx-code-alt',
-      title: 'Frontend Development',
-      description: 'Building responsive and interactive user interfaces using modern frameworks and libraries.',
-    },
-    {
-      icon: 'bx-server',
-      title: 'Backend Development',
-      description: 'Creating robust server-side applications and RESTful APIs with Node.js and Express.',
-    },
-    {
-      icon: 'bx-data',
-      title: 'Database Management',
-      description: 'Designing and optimizing database schemas using SQL and NoSQL solutions.',
-    },
-    {
-      icon: 'bx-layer',
-      title: 'Full Stack Integration',
-      description: 'Seamlessly connecting frontend and backend systems for optimal performance.',
-    },
-  ];
+  // Tech stack categories
+  const techStack = {
+    languages: ['Python', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3', 'Java'],
+    frameworks: ['React', 'Streamlit', 'Flask', 'Django', 'Spring Boot'],
+    databases: ['MySQL', 'PostgreSQL', 'SQLite', 'Supabase'],
+  };
 
   return (
-    <section className="py-20 bg-white">
+    <Box as="section" py={20} bg="gray.50" id="about">
       <Container maxW="container.xl">
         <Heading
           as="h2"
@@ -48,49 +36,138 @@ const About = () => {
         >
           About Me
         </Heading>
-        <Text
-          textAlign="center"
-          fontSize={{ base: 'lg', md: 'xl' }}
-          color={textColor}
-          mb={16}
-          maxW="3xl"
-          mx="auto"
-        >
-          I am a passionate full stack developer with expertise in building modern web applications.
-          My focus is on creating efficient, scalable, and user-friendly solutions.
-        </Text>
 
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap={8}>
-          {features.map((feature, index) => (
-            <Box
-              key={index}
-              p={6}
-              bg="white"
-              rounded="lg"
-              boxShadow="md"
-              textAlign="center"
-            >
-              <Box
-                as="span"
-                display="inline-block"
-                w={12}
-                h={12}
-                color="blue.500"
-                mb={4}
-              >
-                <i className={`bx ${feature.icon} text-4xl`}></i>
+        {/* Personal Information */}
+        <Stack spacing={8} mb={12}>
+          <Box>
+            <Heading as="h3" size="lg" mb={4} color="blue.500">
+              Personal Information
+            </Heading>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+              <Box>
+                <Stack spacing={3}>
+                  <Text fontSize="lg" fontWeight="bold">Full Name</Text>
+                  <Text fontSize="lg" color={textColor}>AL-FRASKHAN A. JOSE</Text>
+                  
+                  <Text fontSize="lg" fontWeight="bold">Profession</Text>
+                  <Text fontSize="lg" color={textColor}>Full Stack Developer</Text>
+                  <Text fontSize="lg" color={textColor}>Aspiring Software Engineer</Text>
+                </Stack>
               </Box>
-              <Heading as="h3" size="md" mb={2}>
-                {feature.title}
-              </Heading>
-              <Text color={textColor}>
-                {feature.description}
-              </Text>
+              
+              <Box>
+                <Stack spacing={3}>
+                  <Text fontSize="lg" fontWeight="bold">Current Employment</Text>
+                  <Text fontSize="lg" color={textColor}>Position: Full Stack Developer</Text>
+                  <Text fontSize="lg" color={textColor}>Company: ALTSOLUTIONS</Text>
+                </Stack>
+              </Box>
+            </SimpleGrid>
+          </Box>
+
+          {/* Education */}
+          <Box>
+            <Heading as="h3" size="lg" mb={4} color="blue.500">
+              Education
+            </Heading>
+            <Box p={6} bg="white" rounded="lg" boxShadow="md">
+              <Text fontSize="lg" fontWeight="bold">IT Graduate</Text>
+              <Text fontSize="lg" color={textColor}>Pilar College</Text>
+              <Text fontSize="lg" color={textColor}>Graduation Year: 2025</Text>
             </Box>
-          ))}
-        </SimpleGrid>
+          </Box>
+
+          {/* Interests & Expertise */}
+          <Box>
+            <Heading as="h3" size="lg" mb={4} color="blue.500">
+              Interests & Expertise
+            </Heading>
+            <List spacing={3}>
+              <ListItem>
+                <ListIcon as={CheckCircleIcon} color="green.500" />
+                <Text as="span" fontSize="lg" color={textColor}>Web & App Development</Text>
+              </ListItem>
+              <ListItem>
+                <ListIcon as={CheckCircleIcon} color="green.500" />
+                <Text as="span" fontSize="lg" color={textColor}>Data Analytics (future interest)</Text>
+              </ListItem>
+              <ListItem>
+                <ListIcon as={CheckCircleIcon} color="green.500" />
+                <Text as="span" fontSize="lg" color={textColor}>IT Support & System Efficiency</Text>
+              </ListItem>
+            </List>
+          </Box>
+        </Stack>
+
+        <Divider my={12} />
+
+        {/* Tech Stack */}
+        <Box>
+          <Heading as="h3" size="lg" mb={6} textAlign="center" color="blue.500">
+            Tech Stack
+          </Heading>
+          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
+            <Box p={6} bg="white" rounded="lg" boxShadow="md">
+              <Flex align="center" mb={4}>
+                <i className="bx bx-code text-3xl text-blue-500 mr-2"></i>
+                <Heading as="h4" size="md">Languages</Heading>
+              </Flex>
+              <List spacing={2}>
+                {techStack.languages.map((lang, index) => (
+                  <ListItem key={index}>
+                    <ListIcon as={CheckCircleIcon} color="green.500" />
+                    {lang}
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+
+            <Box p={6} bg="white" rounded="lg" boxShadow="md">
+              <Flex align="center" mb={4}>
+                <i className="bx bx-cube text-3xl text-blue-500 mr-2"></i>
+                <Heading as="h4" size="md">Frameworks</Heading>
+              </Flex>
+              <List spacing={2}>
+                {techStack.frameworks.map((framework, index) => (
+                  <ListItem key={index}>
+                    <ListIcon as={CheckCircleIcon} color="green.500" />
+                    {framework}
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+
+            <Box p={6} bg="white" rounded="lg" boxShadow="md">
+              <Flex align="center" mb={4}>
+                <i className="bx bx-data text-3xl text-blue-500 mr-2"></i>
+                <Heading as="h4" size="md">Databases</Heading>
+              </Flex>
+              <List spacing={2}>
+                {techStack.databases.map((db, index) => (
+                  <ListItem key={index}>
+                    <ListIcon as={CheckCircleIcon} color="green.500" />
+                    {db}
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          </SimpleGrid>
+        </Box>
+
+        {/* GitHub Stats */}
+        <Box mt={12} textAlign="center">
+          <Heading as="h3" size="lg" mb={4} color="blue.500">
+            GitHub Activity
+          </Heading>
+          <Text fontSize="lg" color={textColor}>
+            GitHub Username: <Text as="span" fontWeight="bold">fraskhan</Text>
+          </Text>
+          <Text fontSize="lg" color={textColor} mb={4}>
+            Stats & Streak publicly visible via GitHub README.
+          </Text>
+        </Box>
       </Container>
-    </section>
+    </Box>
   );
 };
 
