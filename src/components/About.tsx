@@ -1,173 +1,100 @@
 import React from 'react';
-import {
-  Box,
-  Container,
-  Heading,
-  Text,
-  SimpleGrid,
-  Stack,
-  List,
-  ListItem,
-  ListIcon,
-  Divider,
-  Flex,
-} from '@chakra-ui/react';
-import { CheckCircleIcon } from '@chakra-ui/icons';
-import 'boxicons/css/boxicons.min.css';
+import { motion } from 'framer-motion';
+import { FaMapMarkerAlt, FaEnvelope, FaPhone, FaLinkedin, FaTrophy } from 'react-icons/fa';
 
 const About = () => {
-  const textColor = 'gray.600';
-
-  // Tech stack categories
-  const techStack = {
-    languages: ['Python', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3', 'Java'],
-    frameworks: ['React', 'Streamlit', 'Flask', 'Django', 'Spring Boot'],
-    databases: ['MySQL', 'PostgreSQL', 'SQLite', 'Supabase'],
-  };
-
   return (
-    <Box as="section" py={20} bg="gray.50" id="about">
-      <Container maxW="container.xl">
-        <Heading
-          as="h2"
-          textAlign="center"
-          mb={12}
-          fontSize={{ base: '2xl', md: '3xl' }}
+    <section id="about" className="py-20 bg-black-100">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
         >
-          About Me
-        </Heading>
+          <h2 className="text-4xl font-bold text-white mb-2">About Me</h2>
+          <div className="w-12 h-1 bg-blue-500 rounded mx-auto"></div>
+        </motion.div>
 
-        {/* Personal Information */}
-        <Stack spacing={8} mb={12}>
-          <Box>
-            <Heading as="h3" size="lg" mb={4} color="blue.500">
-              Personal Information
-            </Heading>
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-              <Box>
-                <Stack spacing={3}>
-                  <Text fontSize="lg" fontWeight="bold">Full Name</Text>
-                  <Text fontSize="lg" color={textColor}>AL-FRASKHAN A. JOSE</Text>
-                  
-                  <Text fontSize="lg" fontWeight="bold">Profession</Text>
-                  <Text fontSize="lg" color={textColor}>Full Stack Developer</Text>
-                  <Text fontSize="lg" color={textColor}>Aspiring Software Engineer</Text>
-                </Stack>
-              </Box>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          {/* Profile Photo */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="flex justify-center"
+          >
+            <div className="relative w-64 h-64 md:w-80 md:h-80">
+              {/* Background Shape */}
+              <div className="absolute inset-0 bg-blue-500 rounded-lg transform rotate-6"></div>
               
-              <Box>
-                <Stack spacing={3}>
-                  <Text fontSize="lg" fontWeight="bold">Current Employment</Text>
-                  <Text fontSize="lg" color={textColor}>Position: Full Stack Developer</Text>
-                  <Text fontSize="lg" color={textColor}>Company: ALTSOLUTIONS</Text>
-                </Stack>
-              </Box>
-            </SimpleGrid>
-          </Box>
+              {/* Profile Image */}
+              <div className="absolute inset-0 overflow-hidden rounded-lg">
+                <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                  {/* Replace with your actual image */}
+                  <span className="text-gray-600 text-lg">Profile Photo</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
 
-          {/* Education */}
-          <Box>
-            <Heading as="h3" size="lg" mb={4} color="blue.500">
-              Education
-            </Heading>
-            <Box p={6} bg="white" rounded="lg" boxShadow="md">
-              <Text fontSize="lg" fontWeight="bold">IT Graduate</Text>
-              <Text fontSize="lg" color={textColor}>Pilar College</Text>
-              <Text fontSize="lg" color={textColor}>Graduation Year: 2025</Text>
-            </Box>
-          </Box>
+          {/* About Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-left"
+          >
+            <h3 className="text-2xl font-semibold text-white mb-4">Al-Fraskhan A. Jose</h3>
+            <p className="text-secondary mb-6">
+              As a committed IT student, I can't wait to use my abilities and expertise in a stimulating workplace. 
+              I have a strong desire to learn, am flexible enough to take on new challenges, and promise to keep going 
+              until my objectives are met. I look for chances to develop and make a significant contribution to the team's success.
+            </p>
 
-          {/* Interests & Expertise */}
-          <Box>
-            <Heading as="h3" size="lg" mb={4} color="blue.500">
-              Interests & Expertise
-            </Heading>
-            <List spacing={3}>
-              <ListItem>
-                <ListIcon as={CheckCircleIcon} color="green.500" />
-                <Text as="span" fontSize="lg" color={textColor}>Web & App Development</Text>
-              </ListItem>
-              <ListItem>
-                <ListIcon as={CheckCircleIcon} color="green.500" />
-                <Text as="span" fontSize="lg" color={textColor}>Data Analytics (future interest)</Text>
-              </ListItem>
-              <ListItem>
-                <ListIcon as={CheckCircleIcon} color="green.500" />
-                <Text as="span" fontSize="lg" color={textColor}>IT Support & System Efficiency</Text>
-              </ListItem>
-            </List>
-          </Box>
-        </Stack>
+            {/* Personal Information */}
+            <div className="mb-6 space-y-3">
+              <div className="flex items-center">
+                <FaMapMarkerAlt className="text-blue-500 mr-3" />
+                <span className="text-secondary">Kasanyangan, Zamboanga City</span>
+              </div>
+              <div className="flex items-center">
+                <FaPhone className="text-blue-500 mr-3" />
+                <span className="text-secondary">09650348702</span>
+              </div>
+              <div className="flex items-center">
+                <FaEnvelope className="text-blue-500 mr-3" />
+                <span className="text-secondary">alfraskhanj@gmail.com</span>
+              </div>
+              <div className="flex items-center">
+                <FaLinkedin className="text-blue-500 mr-3" />
+                <span className="text-secondary">alfraskhan-jose-22b6b6358</span>
+              </div>
+            </div>
 
-        <Divider my={12} />
-
-        {/* Tech Stack */}
-        <Box>
-          <Heading as="h3" size="lg" mb={6} textAlign="center" color="blue.500">
-            Tech Stack
-          </Heading>
-          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
-            <Box p={6} bg="white" rounded="lg" boxShadow="md">
-              <Flex align="center" mb={4}>
-                <i className="bx bx-code text-3xl text-blue-500 mr-2"></i>
-                <Heading as="h4" size="md">Languages</Heading>
-              </Flex>
-              <List spacing={2}>
-                {techStack.languages.map((lang, index) => (
-                  <ListItem key={index}>
-                    <ListIcon as={CheckCircleIcon} color="green.500" />
-                    {lang}
-                  </ListItem>
-                ))}
-              </List>
-            </Box>
-
-            <Box p={6} bg="white" rounded="lg" boxShadow="md">
-              <Flex align="center" mb={4}>
-                <i className="bx bx-cube text-3xl text-blue-500 mr-2"></i>
-                <Heading as="h4" size="md">Frameworks</Heading>
-              </Flex>
-              <List spacing={2}>
-                {techStack.frameworks.map((framework, index) => (
-                  <ListItem key={index}>
-                    <ListIcon as={CheckCircleIcon} color="green.500" />
-                    {framework}
-                  </ListItem>
-                ))}
-              </List>
-            </Box>
-
-            <Box p={6} bg="white" rounded="lg" boxShadow="md">
-              <Flex align="center" mb={4}>
-                <i className="bx bx-data text-3xl text-blue-500 mr-2"></i>
-                <Heading as="h4" size="md">Databases</Heading>
-              </Flex>
-              <List spacing={2}>
-                {techStack.databases.map((db, index) => (
-                  <ListItem key={index}>
-                    <ListIcon as={CheckCircleIcon} color="green.500" />
-                    {db}
-                  </ListItem>
-                ))}
-              </List>
-            </Box>
-          </SimpleGrid>
-        </Box>
-
-        {/* GitHub Stats */}
-        <Box mt={12} textAlign="center">
-          <Heading as="h3" size="lg" mb={4} color="blue.500">
-            GitHub Activity
-          </Heading>
-          <Text fontSize="lg" color={textColor}>
-            GitHub Username: <Text as="span" fontWeight="bold">fraskhan</Text>
-          </Text>
-          <Text fontSize="lg" color={textColor} mb={4}>
-            Stats & Streak publicly visible via GitHub README.
-          </Text>
-        </Box>
-      </Container>
-    </Box>
+            {/* Fun Facts */}
+            <div>
+              <h4 className="text-xl font-semibold text-white mb-3">Fun Facts</h4>
+              <ul className="space-y-2">
+                <li className="flex items-center">
+                  <FaTrophy className="text-yellow-500 mr-3" />
+                  <span className="text-secondary">Champion – Chess Competition, Palaro SY 2023–2024</span>
+                </li>
+                <li className="flex items-center">
+                  <div className="w-6 h-6 flex items-center justify-center bg-blue-500 rounded-full mr-3">
+                    <span className="font-bold text-white">ED</span>
+                  </div>
+                  <span className="text-secondary">Executive Director of Zamboanga Youth Movement Association (SPORTS)</span>
+                </li>
+              </ul>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
   );
 };
 
