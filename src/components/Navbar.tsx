@@ -15,6 +15,7 @@ const navLinks = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +25,19 @@ const Navbar = () => {
       } else {
         setScrolled(false);
       }
+
+      // Determine active section based on scroll position
+      const sections = navLinks.map(link => link.to);
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 100 && rect.bottom >= 100) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -32,8 +46,41 @@ const Navbar = () => {
     };
   }, []);
 
+  // Animation variants
+  const navbarVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.6, 
+        ease: "easeOut",
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      } 
+    }
+  };
+
+  const linkVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: { opacity: 1, y: 0 },
+    hover: { scale: 1.1, color: "#87CEEB" }
+  };
+
+  const mobileMenuVariants = {
+    closed: { opacity: 0, height: 0, transition: { duration: 0.3, ease: "easeInOut" } },
+    open: { opacity: 1, height: "auto", transition: { duration: 0.4, ease: "easeInOut" } }
+  };
+
   return (
-    <nav className={`fixed w-full z-20 top-0 left-0 transition-all duration-300 ${scrolled ? 'bg-primary/80 backdrop-blur-md shadow-lg py-2' : 'bg-transparent py-4'}`}>
+    <motion.nav 
+      initial="hidden"
+      animate="visible"
+      variants={navbarVariants}
+      className={`fixed w-full z-20 top-0 left-0 transition-all duration-300 ${
+        scrolled ? 'bg-black-200/90 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.1)] py-2' : 'bg-transparent py-4'
+      }`}
+    >
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
         <Link
@@ -42,74 +89,131 @@ const Navbar = () => {
           smooth={true}
           offset={-70}
           duration={500}
-          className="text-white text-2xl font-bold cursor-pointer"
+          className="cursor-pointer"
         >
-          <span className="text-blue-500">AL</span>-FRASKHAN
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <span className="text-2xl font-bold">
+              <span className="text-accent">AL</span>
+              <span className="text-white-100">-FRASKHAN</span>
+            </span>
+          </motion.div>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-8">
+        <motion.div className="hidden md:flex space-x-8">
           {navLinks.map((link) => (
-            <Link
+            <motion.div
               key={link.name}
-              to={link.to}
-              spy={true}
-              smooth={true}
-              offset={-70}
-              duration={500}
-              activeClass="text-blue-400"
-              className="text-gray-300 hover:text-white transition-colors cursor-pointer"
+              variants={linkVariants}
+              whileHover="hover"
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="relative"
             >
-              {link.name}
-            </Link>
+              <Link
+                to={link.to}
+                spy={true}
+                smooth={true}
+                offset={-70}
+                duration={500}
+                className={`text-white-100 hover:text-accent transition-colors cursor-pointer px-2 py-1 relative`}
+              >
+                {link.name}
+                {activeSection === link.to && (
+                  <motion.div 
+                    layoutId="underline"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent" 
+                    initial={false}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Mobile Navigation Button */}
-        <div className="md:hidden flex items-center">
-          <button
+        <motion.div 
+          className="md:hidden flex items-center"
+          whileTap={{ scale: 0.9 }}
+        >
+          <motion.button
             onClick={() => setIsOpen(!isOpen)}
-            className="text-white focus:outline-none"
+            className="text-white-100 focus:outline-none"
+            whileHover={{ scale: 1.1 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
             aria-label="menu"
           >
             {isOpen ? (
-              <FaTimes className="h-6 w-6" />
+              <motion.div
+                key="close"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <FaTimes className="h-6 w-6 text-accent" />
+              </motion.div>
             ) : (
-              <FaBars className="h-6 w-6" />
+              <motion.div
+                key="menu"
+                initial={{ rotate: 90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: -90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <FaBars className="h-6 w-6" />
+              </motion.div>
             )}
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
 
       {/* Mobile Menu */}
-      <motion.div
-        initial={{ opacity: 0, height: 0 }}
-        animate={{
-          opacity: isOpen ? 1 : 0,
-          height: isOpen ? 'auto' : 0
-        }}
-        transition={{ duration: 0.3 }}
-        className="md:hidden bg-primary/90 backdrop-blur-md overflow-hidden"
-      >
-        <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.to}
-              spy={true}
-              smooth={true}
-              offset={-70}
-              duration={500}
-              activeClass="text-blue-400"
-              className="text-gray-300 hover:text-white transition-colors cursor-pointer"
-              onClick={() => setIsOpen(false)}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </div>
-      </motion.div>
-    </nav>
+      {isOpen && (
+        <motion.div
+          variants={mobileMenuVariants}
+          initial="closed"
+          animate="open"
+          className="md:hidden bg-black-100/95 backdrop-blur-md overflow-hidden border-t border-secondary/20"
+        >
+          <motion.div 
+            className="container mx-auto px-4 py-4 flex flex-col space-y-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1, staggerChildren: 0.1, delayChildren: 0.2 }}
+          >
+            {navLinks.map((link, index) => (
+              <motion.div
+                key={link.name}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ x: 10 }}
+              >
+                <Link
+                  to={link.to}
+                  spy={true}
+                  smooth={true}
+                  offset={-70}
+                  duration={500}
+                  className={`block text-lg py-2 px-3 rounded-md transition-colors cursor-pointer ${
+                    activeSection === link.to
+                      ? 'text-accent bg-accent/10'
+                      : 'text-white-100 hover:text-accent'
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {link.name}
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
+      )}
+    </motion.nav>
   );
 };
 
