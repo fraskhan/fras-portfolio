@@ -12,10 +12,21 @@ const navLinks = [
   { name: 'Contact', to: 'contact' },
 ];
 
-const Navbar = () => {
+interface NavbarProps {
+  activeSection?: string;
+  onSectionChange?: (section: string) => void;
+}
+
+const Navbar = ({ 
+  activeSection: externalActiveSection, 
+  onSectionChange 
+}: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
+  const [internalActiveSection, setInternalActiveSection] = useState('home');
+  
+  // Use external active section if provided, otherwise use internal state
+  const activeSection = externalActiveSection || internalActiveSection;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,7 +44,10 @@ const Navbar = () => {
         if (element) {
           const rect = element.getBoundingClientRect();
           if (rect.top <= 100 && rect.bottom >= 100) {
-            setActiveSection(section);
+            setInternalActiveSection(section);
+            if (onSectionChange) {
+              onSectionChange(section);
+            }
             break;
           }
         }
@@ -44,7 +58,7 @@ const Navbar = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [onSectionChange]);
 
   // Animation variants
   const navbarVariants = {
@@ -72,6 +86,17 @@ const Navbar = () => {
     open: { opacity: 1, height: "auto", transition: { duration: 0.4, ease: "easeInOut" } }
   };
 
+  // Handle section change
+  const handleSectionClick = (section: string) => {
+    setInternalActiveSection(section);
+    if (onSectionChange) {
+      onSectionChange(section);
+    }
+    if (isOpen) {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <motion.nav 
       initial="hidden"
@@ -90,6 +115,7 @@ const Navbar = () => {
           offset={-70}
           duration={500}
           className="cursor-pointer"
+          onClick={() => handleSectionClick('home')}
         >
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -119,6 +145,7 @@ const Navbar = () => {
                 offset={-70}
                 duration={500}
                 className={`text-white-100 hover:text-accent transition-colors cursor-pointer px-2 py-1 relative`}
+                onClick={() => handleSectionClick(link.to)}
               >
                 {link.name}
                 {activeSection === link.to && (
@@ -204,7 +231,7 @@ const Navbar = () => {
                       ? 'text-accent bg-accent/10'
                       : 'text-white-100 hover:text-accent'
                   }`}
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => handleSectionClick(link.to)}
                 >
                   {link.name}
                 </Link>
