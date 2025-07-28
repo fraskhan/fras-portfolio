@@ -1,3 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import external CSS */
+@import 'aos/dist/aos.css';
+@import 'react-vertical-timeline-component/style.min.css';
+
 /* Base styles */
 :root {
   --primary-color: #121212;
@@ -8,14 +16,11 @@
   --white-100: #f3f3f3;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 html {
   scroll-behavior: smooth;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 body {
@@ -33,12 +38,6 @@ body {
   display: none;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-html {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -50,77 +49,26 @@ code {
   display: block;
 }
 
-/* Container styles */
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+/* Custom component styles */
+@layer components {
+  .btn {
+    @apply inline-block px-5 py-2.5 bg-secondary text-white-100 border-0 rounded cursor-pointer font-bold transition-all duration-300 ease-in-out;
+  }
+  
+  .btn:hover {
+    @apply bg-accent text-black-200;
+  }
+  
+  .section {
+    @apply py-20;
+  }
+  
+  .container {
+    @apply w-full max-w-6xl mx-auto px-5;
+  }
 }
 
-.section {
-  padding: 80px 0;
-}
-
-/* Flex utilities */
-.flex {
-  display: flex;
-}
-
-.flex-col {
-  flex-direction: column;
-}
-
-.items-center {
-  align-items: center;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
-.justify-between {
-  justify-content: space-between;
-}
-
-.gap-4 {
-  gap: 16px;
-}
-
-.gap-8 {
-  gap: 32px;
-}
-
-/* Text utilities */
-.text-center {
-  text-align: center;
-}
-
-.font-bold {
-  font-weight: bold;
-}
-
-.text-xl {
-  font-size: 1.25rem;
-}
-
-.text-2xl {
-  font-size: 1.5rem;
-}
-
-.text-3xl {
-  font-size: 1.875rem;
-}
-
-.text-4xl {
-  font-size: 2.25rem;
-}
-
-/* Import external CSS */
-@import 'aos/dist/aos.css';
-@import 'react-vertical-timeline-component/style.min.css';
-
-/* Custom animations */
+/* Custom animations that aren't in Tailwind */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -134,33 +82,15 @@ code {
   animation: fadeIn 1s ease forwards;
 }
 
-/* Button styles */
-.btn {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: var(--secondary-color);
-  color: var(--white-100);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.btn:hover {
-  background-color: var(--accent-color);
-  color: var(--black-200);
-}
-
-/* Media queries */
+/* Media queries for responsive design */
 @media screen and (max-width: 768px) {
   .section {
-    padding: 60px 0;
+    @apply py-16;
   }
 }
 
 @media screen and (max-width: 450px) {
   .section {
-    padding: 40px 0;
+    @apply py-12;
   }
 }

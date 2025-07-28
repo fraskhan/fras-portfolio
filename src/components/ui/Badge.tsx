@@ -1,25 +1,35 @@
 import React from 'react';
+import { BadgeProps } from '../../types';
+import { cn } from '../../utils/cn';
 
-interface BadgeProps {
-  children: React.ReactNode;
-  className?: string;
-  variant?: 'default' | 'outline' | 'subtle';
-}
-
-const Badge = ({
+const Badge: React.FC<BadgeProps> = ({
   children,
-  className = '',
+  className,
   variant = 'default',
-}: BadgeProps) => {
+  size = 'md',
+}) => {
+  const baseStyles = "inline-flex items-center justify-center font-medium rounded-full transition-all duration-200";
+  
   const variantStyles = {
-    default: 'bg-[var(--accent-color)] text-[var(--primary-color)]',
-    outline: 'bg-transparent border border-[var(--accent-color)] text-[var(--accent-color)]',
-    subtle: 'bg-[rgba(135,206,235,0.2)] text-[var(--accent-color)]',
+    default: 'bg-accent text-primary',
+    outline: 'bg-transparent border border-accent text-accent',
+    subtle: 'bg-accent/20 text-accent',
+  };
+  
+  const sizeStyles = {
+    sm: 'px-2 py-1 text-xs',
+    md: 'px-3 py-1 text-sm',
+    lg: 'px-4 py-2 text-base',
   };
   
   return (
     <span 
-      className={`inline-block py-1 px-3 rounded-full text-sm font-medium ${variantStyles[variant]} ${className}`}
+      className={cn(
+        baseStyles,
+        variantStyles[variant],
+        sizeStyles[size],
+        className
+      )}
     >
       {children}
     </span>

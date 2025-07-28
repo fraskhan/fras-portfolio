@@ -8,6 +8,7 @@ import Experience from './components/Experience';
 import Certifications from './components/Certifications';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+
 import AOS from 'aos';
 import { gsap } from 'gsap';
 import './index.css'; // Explicitly import CSS
@@ -86,14 +87,13 @@ function App() {
       className="relative z-0 bg-primary"
       style={{ opacity: 0 }} // Initial state before GSAP animation
     >
+
+      
       <div className="relative bg-cover bg-no-repeat bg-center">
         {/* Gradient overlay for hero section */}
         <div className="absolute inset-0 bg-gradient-to-b from-black-200 via-transparent to-primary z-[-1]"></div>
         <Navbar activeSection={activeSection} onSectionChange={handleSectionChange} />
-        <Hero 
-          {...heroData} 
-          onContactClick={scrollToContact}
-        />
+                <Hero />
       </div>
       
       <About />
