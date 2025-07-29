@@ -312,16 +312,14 @@ const Experience = () => {
     }
   ];
 
-  // Combine and sort all timeline items
-  const allTimelineItems = [...educationItems, ...experienceItems, ...certificationItems]
-    .sort((a, b) => {
-      const dateA = new Date(a.endDate || a.date);
-      const dateB = new Date(b.endDate || b.date);
-      return dateB.getTime() - dateA.getTime(); // Most recent first
-    });
+  // Combine all timeline items
+  const allItems = [...educationItems, ...experienceItems, ...certificationItems];
+  
+  // Debug log to check if we have items
+  console.log('All items:', allItems.length, allItems);
 
   // Filter items based on active filters
-  const filteredItems = allTimelineItems.filter(item => {
+  const filteredItems = allItems.filter(item => {
     if (activeFilter.type !== 'all' && item.type !== activeFilter.type) return false;
     if (activeFilter.category !== 'all' && item.category !== activeFilter.category) return false;
     
@@ -338,7 +336,7 @@ const Experience = () => {
   });
 
   // Get unique categories for filter options
-  const categories = ['all', ...Array.from(new Set(allTimelineItems.map(item => item.category)))];
+  const categories = ['all', ...Array.from(new Set(allItems.map(item => item.category)))];
   
   // Pagination logic
   const itemsPerPage = viewMode === 'compact' ? 6 : 4;
@@ -348,16 +346,28 @@ const Experience = () => {
     (currentPage + 1) * itemsPerPage
   );
 
+  const handleFilterChange = (key: 'type' | 'category' | 'timeRange', value: string) => {
+    setActiveFilter(prev => ({ ...prev, [key]: value }));
+    setCurrentPage(0); // Reset to first page when filter changes
+  };
+
+  const handleViewModeChange = (mode: ViewMode) => {
+    setViewMode(mode);
+    setCurrentPage(0); // Reset to first page when view changes
+  };
+
   return (
     <section 
       ref={containerRef}
       id="experience" 
       className="relative min-h-screen py-20 bg-gradient-to-br from-primary via-black-100 to-primary overflow-hidden"
+      style={{ position: 'relative' }}
     >
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <motion.div
           className="absolute top-20 left-10 w-72 h-72 bg-accent/10 rounded-full blur-3xl"
+          initial={{ scale: 1, opacity: 0.3 }}
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3],
@@ -370,9 +380,10 @@ const Experience = () => {
         />
         <motion.div
           className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"
+          initial={{ scale: 1, opacity: 0.3 }}
           animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.2, 0.4, 0.2],
+            scale: [1, 1.1, 1],
+            opacity: [0.3, 0.4, 0.3],
           }}
           transition={{
             duration: 10,
@@ -395,22 +406,31 @@ const Experience = () => {
             animate={isInView ? { scale: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.6, type: "spring" }}
             className="inline-flex items-center gap-2 px-4 py-2 bg-accent/20 rounded-full border border-accent/30 mb-6"
+            style={{ transformOrigin: 'center' }}
           >
             <FaGraduationCap className="text-accent" />
             <span className="text-accent font-medium text-sm">My Journey</span>
           </motion.div>
           
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="text-5xl md:text-6xl font-bold text-white mb-4"
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="text-4xl md:text-6xl font-bold text-white-100 leading-tight mb-6"
           >
             Experience & 
-            <span className="bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">
-              {" "}Education
-            </span>
+            <span className="text-transparent bg-gradient-to-r from-accent to-secondary bg-clip-text"> Education</span>
           </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="text-lg text-white-100/80 max-w-2xl mb-8"
+          >
+            A comprehensive journey through professional development, academic achievements, 
+            and continuous learning in technology and leadership.
+          </motion.p>
           
           <motion.div
             initial={{ width: 0 }}
@@ -418,15 +438,6 @@ const Experience = () => {
             transition={{ delay: 0.6, duration: 0.8 }}
             className="h-1 bg-gradient-to-r from-accent to-secondary rounded mx-auto mb-6"
           />
-          
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.8, duration: 0.6 }}
-            className="text-lg text-white-100/80 max-w-3xl mx-auto leading-relaxed"
-          >
-            A comprehensive overview of my academic achievements, professional experience, and continuous learning journey in technology and leadership.
-          </motion.p>
         </motion.div>
 
         {/* Advanced Filter & View Controls */}
@@ -445,7 +456,7 @@ const Experience = () => {
                 <div className="flex items-center gap-2">
                   <select
                     value={activeFilter.type}
-                    onChange={(e) => setActiveFilter(prev => ({ ...prev, type: e.target.value as any }))}
+                    onChange={(e) => handleFilterChange('type', e.target.value)}
                     className="bg-primary/50 border border-white-100/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-accent transition-colors"
                   >
                     <option value="all">All Types</option>
@@ -458,7 +469,7 @@ const Experience = () => {
                 {/* Category Filter */}
                 <select
                   value={activeFilter.category}
-                  onChange={(e) => setActiveFilter(prev => ({ ...prev, category: e.target.value }))}
+                  onChange={(e) => handleFilterChange('category', e.target.value)}
                   className="bg-primary/50 border border-white-100/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-accent transition-colors"
                 >
                   {categories.map(category => (
@@ -471,7 +482,7 @@ const Experience = () => {
                 {/* Time Range Filter */}
                 <select
                   value={activeFilter.timeRange}
-                  onChange={(e) => setActiveFilter(prev => ({ ...prev, timeRange: e.target.value as any }))}
+                  onChange={(e) => handleFilterChange('timeRange', e.target.value)}
                   className="bg-primary/50 border border-white-100/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-accent transition-colors"
                 >
                   <option value="all">All Time</option>
@@ -482,21 +493,30 @@ const Experience = () => {
 
               {/* View Mode Controls */}
               <div className="flex items-center gap-2 bg-primary/30 rounded-lg p-1">
-                {(['timeline', 'grid', 'compact'] as ViewMode[]).map((mode) => (
-                  <button
+                {(['timeline', 'grid', 'compact'] as const).map(mode => (
+                  <motion.button
                     key={mode}
-                    onClick={() => setViewMode(mode)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                      viewMode === mode
-                        ? 'bg-accent text-primary shadow-lg'
-                        : 'text-white-100/70 hover:text-white hover:bg-white-100/10'
+                    onClick={() => handleViewModeChange(mode)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                      viewMode === mode 
+                        ? 'bg-accent text-primary shadow-lg' 
+                        : 'bg-white-100/10 text-white-100 hover:bg-white-100/20'
                     }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    initial={{ opacity: 1, scale: 1 }}
+                    style={{ 
+                      boxShadow: viewMode === mode 
+                        ? '0 4px 12px rgba(135, 206, 235, 0.3)' 
+                        : '0 0px 0px rgba(0, 0, 0, 0)',
+                      transformOrigin: 'center'
+                    }}
                   >
                     {mode === 'timeline' && <FaGraduationCap />}
                     {mode === 'grid' && <FaBriefcase />}
                     {mode === 'compact' && <FaCode />}
                     {mode.charAt(0).toUpperCase() + mode.slice(1)}
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             </div>
@@ -506,34 +526,177 @@ const Experience = () => {
               <span>
                 Showing {paginatedItems.length} of {filteredItems.length} items
               </span>
-              {totalPages > 1 && (
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
-                    disabled={currentPage === 0}
-                    className="p-1 rounded hover:bg-white-100/10 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <FaMapMarkerAlt />
-                  </button>
-                  <span>{currentPage + 1} / {totalPages}</span>
-                  <button
-                    onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
-                    disabled={currentPage === totalPages - 1}
-                    className="p-1 rounded hover:bg-white-100/10 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <FaMapMarkerAlt />
-                  </button>
-                </div>
-              )}
+              {/* Pagination */}
+              <div className="flex items-center gap-4">
+                <motion.button
+                  onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                  disabled={currentPage === 0}
+                  className="p-1 rounded hover:bg-white-100/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                  whileHover={{ scale: currentPage === 0 ? 1 : 1.1 }}
+                  whileTap={{ scale: currentPage === 0 ? 1 : 0.9 }}
+                  initial={{ opacity: 1, scale: 1 }}
+                  style={{ transformOrigin: 'center' }}
+                >
+                  <FaMapMarkerAlt />
+                </motion.button>
+                <span>{currentPage + 1} / {totalPages}</span>
+                <motion.button
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
+                  disabled={currentPage === totalPages - 1}
+                  className="p-1 rounded hover:bg-white-100/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                  whileHover={{ scale: currentPage === totalPages - 1 ? 1 : 1.1 }}
+                  whileTap={{ scale: currentPage === totalPages - 1 ? 1 : 0.9 }}
+                  initial={{ opacity: 1, scale: 1 }}
+                  style={{ transformOrigin: 'center' }}
+                >
+                  <FaMapMarkerAlt />
+                </motion.button>
+              </div>
             </div>
           </div>
         </motion.div>
 
-        {/* Dynamic Content Rendering */}
-        {/* This will be added in the next chunk */}
+        {/* Content Area */}
+        <div className="container mx-auto px-6" style={{ position: 'relative' }}>
+          {/* Timeline View */}
+          {viewMode === 'timeline' && (
+            <div className="space-y-8">
+              {paginatedItems.map((item, index) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
+                  className={`flex items-center gap-8 ${index % 2 === 0 ? '' : 'flex-row-reverse'}`}
+                >
+                  {/* Content Card */}
+                  <div className="flex-1 bg-white-100/5 backdrop-blur-lg border border-white-100/10 rounded-xl p-6 hover:bg-white-100/10 transition-all duration-300">
+                    <div className="flex items-start gap-4">
+                      <div 
+                        className="p-3 rounded-full flex-shrink-0"
+                        style={{ background: item.iconBackground }}
+                      >
+                        {item.icon}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-white-100 mb-2">{item.title}</h3>
+                        <p className="text-accent font-medium mb-2">{item.organization}</p>
+                        <div className="flex items-center gap-4 text-sm text-white-100/70 mb-4">
+                          <span>{item.date}{item.endDate && ` - ${item.endDate}`}</span>
+                          <span>📍 {item.location}</span>
+                        </div>
+                        <div className="space-y-2 mb-4">
+                          {Array.isArray(item.description) 
+                            ? item.description.map((desc: string, i: number) => (
+                                <p key={i} className="text-white-100/80 text-sm leading-relaxed">• {desc}</p>
+                              ))
+                            : <p className="text-white-100/80 text-sm leading-relaxed">• {item.description}</p>
+                          }
+                        </div>
+                        {item.achievements && (
+                          <div className="mb-4">
+                            <h4 className="text-white-100 font-semibold mb-2">Key Achievements:</h4>
+                            {item.achievements.map((achievement: string, i: number) => (
+                              <p key={i} className="text-accent text-sm">🏆 {achievement}</p>
+                            ))}
+                          </div>
+                        )}
+                        <div className="flex flex-wrap gap-2">
+                          {item.tags?.map((tag: string, i: number) => (
+                            <span key={i} className="px-3 py-1 bg-accent/20 text-accent text-xs rounded-full">
+                              {tag}
+                            </span>
+                          )) || []}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Timeline Line */}
+                  <div className="w-1 h-full bg-gradient-to-b from-accent to-secondary rounded-full min-h-[100px]"></div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+          {/* Grid View */}
+          {viewMode === 'grid' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {paginatedItems.map((item, index) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
+                  className="bg-white-100/5 backdrop-blur-lg border border-white-100/10 rounded-xl p-6 hover:bg-white-100/10 hover:scale-105 transition-all duration-300"
+                >
+                  <div 
+                    className="p-3 rounded-full w-fit mb-4"
+                    style={{ background: item.iconBackground }}
+                  >
+                    {item.icon}
+                  </div>
+                  <h3 className="text-lg font-bold text-white-100 mb-2">{item.title}</h3>
+                  <p className="text-accent font-medium mb-2">{item.organization}</p>
+                  <div className="text-sm text-white-100/70 mb-4">
+                    <p>{item.date}{item.endDate && ` - ${item.endDate}`}</p>
+                    <p>📍 {item.location}</p>
+                  </div>
+                  <div className="space-y-1 mb-4">
+                    {Array.isArray(item.description) 
+                      ? item.description.slice(0, 2).map((desc: string, i: number) => (
+                          <p key={i} className="text-white-100/80 text-sm">• {desc}</p>
+                        ))
+                      : <p className="text-white-100/80 text-sm">• {item.description}</p>
+                    }
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {item.tags?.slice(0, 3).map((tag: string, i: number) => (
+                      <span key={i} className="px-2 py-1 bg-accent/20 text-accent text-xs rounded-full">
+                        {tag}
+                      </span>
+                    )) || []}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+          {/* Compact View */}
+          {viewMode === 'compact' && (
+            <div className="space-y-4">
+              {paginatedItems.map((item, index) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05, duration: 0.4 }}
+                  className="bg-white-100/5 backdrop-blur-lg border border-white-100/10 rounded-lg p-4 hover:bg-white-100/10 transition-all duration-300"
+                >
+                  <div className="flex items-center gap-4">
+                    <div 
+                      className="p-2 rounded-full flex-shrink-0"
+                      style={{ background: item.iconBackground }}
+                    >
+                      {item.icon}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-white-100">{item.title}</h3>
+                      <p className="text-accent text-sm">{item.organization}</p>
+                    </div>
+                    <div className="text-right text-sm text-white-100/70">
+                      <p>{item.date}{item.endDate && ` - ${item.endDate}`}</p>
+                      <p>{item.location}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </section>
-  );
-};
+      </section>
+    );
+  };
 
 export default Experience; 
