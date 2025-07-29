@@ -8,6 +8,7 @@ import Experience from './components/Experience';
 import Certifications from './components/Certifications';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import TailwindTest from './components/TailwindTest';
 
 import AOS from 'aos';
 import { gsap } from 'gsap';
@@ -88,6 +89,9 @@ function App() {
       style={{ opacity: 0 }} // Initial state before GSAP animation
     >
 
+      
+      {/* Temporary Tailwind Test - Remove after testing */}
+      <TailwindTest />
       
       <div className="relative bg-cover bg-no-repeat bg-center">
         {/* Gradient overlay for hero section */}
