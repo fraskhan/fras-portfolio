@@ -1,0 +1,14 @@
+# Documents Directory
+This directory contains downloadable documents like resumes, portfolios, and case studies.
+
+## Contents:
+- resume.pdf - Current resume/CV
+- portfolio.pdf - Portfolio document
+- case-studies/ - Detailed project case studies
+- certificates/ - Digital certificates
+
+## Requirements:
+- Keep documents up to date
+- Use descriptive filenames
+- Optimize PDF file sizes
+- Include version control for important documents

@@ -1,0 +1,13 @@
+# Project Images Directory
+This directory contains screenshots, demos, and visual assets for portfolio projects.
+
+## Structure:
+- Each project should have its own subdirectory
+- Use descriptive filenames: thumbnail.jpg, screenshot-desktop.jpg, etc.
+- Optimize images for web (WebP format preferred)
+- Include alt text descriptions in project data
+
+## Recommended image sizes:
+- Thumbnails: 400x300px
+- Screenshots: 1200x800px
+- Mobile screenshots: 375x812px
