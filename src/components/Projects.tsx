@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaGlobe, FaCode } from 'react-icons/fa';
+import { useAppContext } from '../context/AppContext';
 
 // Define types
 interface Project {
@@ -14,6 +15,7 @@ interface Project {
 }
 
 const Projects = () => {
+  const { isDarkMode } = useAppContext();
   const [filter, setFilter] = useState<string>("all");
   
   const projects: Project[] = [
@@ -64,7 +66,9 @@ const Projects = () => {
     : projects.filter(project => project.category === filter);
   
   return (
-    <section id="projects" className="py-20 bg-tertiary">
+    <section id="projects" className={`py-20 transition-colors duration-300 ${
+      isDarkMode ? 'bg-black-100' : 'bg-gray-100'
+    }`}>
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0 }}
@@ -73,9 +77,15 @@ const Projects = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl font-bold text-white mb-2">Featured Projects</h2>
-          <div className="w-12 h-1 bg-blue-500 rounded mx-auto"></div>
-          <p className="mt-4 text-secondary max-w-2xl mx-auto">
+          <h2 className={`text-4xl font-bold mb-2 ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>Featured Projects</h2>
+          <div className={`w-12 h-1 rounded mx-auto ${
+            isDarkMode ? 'bg-accent' : 'bg-accent-light'
+          }`}></div>
+          <p className={`mt-4 max-w-2xl mx-auto ${
+            isDarkMode ? 'text-secondary' : 'text-gray-600'
+          }`}>
             Here are some of my recent projects that showcase my skills and experience.
           </p>
         </motion.div>
@@ -88,8 +98,12 @@ const Projects = () => {
               onClick={() => setFilter(category)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                 filter === category 
-                  ? 'bg-blue-600 text-white' 
-                  : 'bg-black-200 text-secondary hover:bg-blue-600/20'
+                  ? isDarkMode 
+                    ? 'bg-accent text-black-100' 
+                    : 'bg-accent-light text-white'
+                  : isDarkMode
+                    ? 'bg-black-200 text-secondary hover:bg-accent/20'
+                    : 'bg-white text-gray-600 hover:bg-accent-light/20'
               }`}
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -106,27 +120,43 @@ const Projects = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-black-100 rounded-xl overflow-hidden shadow-card hover:shadow-xl transition-all duration-300"
+              className={`rounded-xl overflow-hidden shadow-card hover:shadow-xl transition-all duration-300 ${
+                isDarkMode ? 'bg-black-100' : 'bg-white'
+              }`}
             >
               {/* Project Image */}
-              <div className="relative h-48 bg-gray-700 overflow-hidden">
-                <div className="absolute inset-0 bg-blue-500 opacity-50"></div>
+              <div className={`relative h-48 overflow-hidden ${
+                isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
+              }`}>
+                <div className={`absolute inset-0 opacity-50 ${
+                  isDarkMode ? 'bg-accent' : 'bg-accent-light'
+                }`}></div>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <FaCode className="text-white text-5xl" />
+                  <FaCode className={`text-5xl ${
+                    isDarkMode ? 'text-white' : 'text-gray-100'
+                  }`} />
                 </div>
               </div>
               
               {/* Content */}
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-white mb-2">{project.title}</h3>
-                <p className="text-secondary text-sm mb-4 line-clamp-3">{project.description}</p>
+                <h3 className={`text-xl font-semibold mb-2 ${
+                  isDarkMode ? 'text-white' : 'text-gray-900'
+                }`}>{project.title}</h3>
+                <p className={`text-sm mb-4 line-clamp-3 ${
+                  isDarkMode ? 'text-secondary' : 'text-gray-600'
+                }`}>{project.description}</p>
                 
                 {/* Tech Stack Badges */}
                 <div className="flex flex-wrap gap-2 mb-6">
                   {project.technologies.map((tech, techIndex) => (
                     <span 
                       key={techIndex} 
-                      className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-900/50 text-blue-300"
+                      className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
+                        isDarkMode 
+                          ? 'bg-accent/20 text-accent'
+                          : 'bg-accent-light/20 text-accent-light'
+                      }`}
                     >
                       {tech}
                     </span>
@@ -139,7 +169,11 @@ const Projects = () => {
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 text-center bg-black-200 hover:bg-black-100 text-white py-2 px-3 rounded-lg flex items-center justify-center transition-all duration-300"
+                    className={`flex-1 text-center py-2 px-3 rounded-lg flex items-center justify-center transition-all duration-300 ${
+                      isDarkMode 
+                        ? 'bg-black-200 hover:bg-black-100 text-white'
+                        : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+                    }`}
                   >
                     <FaGithub className="mr-2" /> GitHub
                   </a>
@@ -147,7 +181,11 @@ const Projects = () => {
                     href={project.live}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg flex items-center justify-center transition-all duration-300"
+                    className={`flex-1 text-center py-2 px-3 rounded-lg flex items-center justify-center transition-all duration-300 ${
+                      isDarkMode 
+                        ? 'bg-accent hover:bg-accent/80 text-black-100'
+                        : 'bg-accent-light hover:bg-accent-light/80 text-white'
+                    }`}
                   >
                     <FaGlobe className="mr-2" /> Live Demo
                   </a>

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FaAward, FaTrophy, FaMedal, FaScroll } from 'react-icons/fa';
+import { useAppContext } from '../context/AppContext';
 
 interface Certificate {
   title: string;
@@ -18,6 +19,7 @@ interface Achievement {
 }
 
 const Certifications = () => {
+  const { isDarkMode } = useAppContext();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
   const certificates: Certificate[] = [
@@ -108,7 +110,9 @@ const Certifications = () => {
   };
 
   return (
-    <section id="certifications" className="py-20 bg-black-100">
+    <section id="certifications" className={`py-20 transition-colors duration-300 ${
+      isDarkMode ? 'bg-black-100' : 'bg-gray-100'
+    }`}>
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0 }}
@@ -117,22 +121,34 @@ const Certifications = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-white mb-2">Certifications & Achievements</h2>
-          <div className="w-12 h-1 bg-blue-500 rounded mx-auto"></div>
-          <p className="mt-4 text-secondary max-w-2xl mx-auto">
+          <h2 className={`text-4xl font-bold mb-2 ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>Certifications & Achievements</h2>
+          <div className={`w-12 h-1 rounded mx-auto ${
+            isDarkMode ? 'bg-accent' : 'bg-accent-light'
+          }`}></div>
+          <p className={`mt-4 max-w-2xl mx-auto ${
+            isDarkMode ? 'text-secondary' : 'text-gray-600'
+          }`}>
             My professional certifications, seminars attended, and key achievements.
           </p>
         </motion.div>
 
         {/* Certifications Carousel */}
         <div className="mb-16">
-          <h3 className="text-2xl font-semibold text-white mb-6">Certifications & Seminars</h3>
+          <h3 className={`text-2xl font-semibold mb-6 ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>Certifications & Seminars</h3>
           
           <div className="relative">
             {/* Scroll Left Button */}
             <button 
               onClick={() => scroll(-300)}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full shadow-lg md:flex hidden items-center justify-center"
+              className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full shadow-lg md:flex hidden items-center justify-center text-white ${
+                isDarkMode 
+                  ? 'bg-accent hover:bg-accent/80'
+                  : 'bg-accent-light hover:bg-accent-light/80'
+              }`}
               aria-label="Scroll left"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -155,7 +171,9 @@ const Certifications = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="flex-shrink-0 w-[280px] snap-center"
                 >
-                  <div className="bg-tertiary rounded-xl overflow-hidden h-full">
+                  <div className={`rounded-xl overflow-hidden h-full ${
+                    isDarkMode ? 'bg-black-200' : 'bg-white'
+                  }`}>
                     {/* Certificate Header */}
                     <div className={`bg-gradient-to-r ${cert.color} p-4 flex items-center justify-center`}>
                       <div className="bg-white/20 p-3 rounded-full">
@@ -165,9 +183,15 @@ const Certifications = () => {
                     
                     {/* Certificate Details */}
                     <div className="p-5">
-                      <h4 className="text-white font-medium text-lg mb-2">{cert.title}</h4>
-                      <p className="text-secondary text-sm mb-1">{cert.organizer}</p>
-                      <p className="text-blue-400 text-xs">{cert.date}</p>
+                      <h4 className={`font-medium text-lg mb-2 ${
+                        isDarkMode ? 'text-white' : 'text-gray-800'
+                      }`}>{cert.title}</h4>
+                      <p className={`text-sm mb-1 ${
+                        isDarkMode ? 'text-secondary' : 'text-gray-600'
+                      }`}>{cert.organizer}</p>
+                      <p className={`text-xs ${
+                        isDarkMode ? 'text-accent' : 'text-accent-light'
+                      }`}>{cert.date}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -177,7 +201,11 @@ const Certifications = () => {
             {/* Scroll Right Button */}
             <button 
               onClick={() => scroll(300)}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full shadow-lg md:flex hidden items-center justify-center"
+              className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full shadow-lg md:flex hidden items-center justify-center text-white ${
+                isDarkMode 
+                  ? 'bg-accent hover:bg-accent/80'
+                  : 'bg-accent-light hover:bg-accent-light/80'
+              }`}
               aria-label="Scroll right"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -189,7 +217,9 @@ const Certifications = () => {
 
         {/* Achievements */}
         <div>
-          <h3 className="text-2xl font-semibold text-white mb-6">Achievements</h3>
+          <h3 className={`text-2xl font-semibold mb-6 ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>Achievements</h3>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {achievements.map((achievement, index) => (
@@ -199,14 +229,20 @@ const Certifications = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="bg-tertiary rounded-xl p-6 flex items-center"
+                className={`rounded-xl p-6 flex items-center ${
+                  isDarkMode ? 'bg-black-200' : 'bg-white'
+                }`}
               >
                 <div className={`bg-gradient-to-r ${achievement.color} p-4 rounded-xl mr-4 flex-shrink-0`}>
                   {React.cloneElement(achievement.icon, { className: "text-white text-2xl" })}
                 </div>
                 <div>
-                  <h4 className="text-white font-medium text-lg">{achievement.title}</h4>
-                  <p className="text-secondary text-sm">{achievement.description}</p>
+                  <h4 className={`font-medium text-lg ${
+                    isDarkMode ? 'text-white' : 'text-gray-800'
+                  }`}>{achievement.title}</h4>
+                  <p className={`text-sm ${
+                    isDarkMode ? 'text-secondary' : 'text-gray-600'
+                  }`}>{achievement.description}</p>
                 </div>
               </motion.div>
             ))}

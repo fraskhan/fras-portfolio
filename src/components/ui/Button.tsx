@@ -1,6 +1,7 @@
 import React from 'react';
 import { ButtonProps } from '../../types';
 import { cn } from '../../utils/cn';
+import { useAppContext } from '../../context/AppContext';
 
 const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
@@ -13,12 +14,29 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props
 }) => {
-  const baseStyles = "inline-flex items-center justify-center font-medium rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-accent/50 disabled:opacity-50 disabled:cursor-not-allowed";
+  const { isDarkMode } = useAppContext();
   
-  const variantStyles = {
-    primary: "bg-accent text-primary hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/25 active:scale-95",
-    secondary: "bg-transparent text-white-100 border-2 border-secondary hover:bg-secondary/20 hover:border-accent active:scale-95",
-    outline: "bg-transparent text-white-100 border-2 border-white-100/20 hover:bg-white-100/10 hover:border-white-100/40 active:scale-95",
+  const baseStyles = "inline-flex items-center justify-center font-medium rounded-full transition-all duration-300 focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed";
+  
+  const getVariantStyles = () => {
+    const focusRing = isDarkMode ? 'focus:ring-accent/50' : 'focus:ring-accent-light/50';
+    
+    switch (variant) {
+      case 'primary':
+        return isDarkMode 
+          ? `bg-accent text-primary hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/25 active:scale-95 ${focusRing}`
+          : `bg-accent-light text-white hover:bg-accent-light/90 hover:shadow-lg hover:shadow-accent-light/25 active:scale-95 ${focusRing}`;
+      case 'secondary':
+        return isDarkMode
+          ? `bg-transparent text-white-100 border-2 border-secondary hover:bg-secondary/20 hover:border-accent active:scale-95 ${focusRing}`
+          : `bg-transparent text-gray-800 border-2 border-secondary-light hover:bg-secondary-light/20 hover:border-accent-light active:scale-95 ${focusRing}`;
+      case 'outline':
+        return isDarkMode
+          ? `bg-transparent text-white-100 border-2 border-white-100/20 hover:bg-white-100/10 hover:border-white-100/40 active:scale-95 ${focusRing}`
+          : `bg-transparent text-gray-800 border-2 border-gray-400/40 hover:bg-gray-100 hover:border-gray-500 active:scale-95 ${focusRing}`;
+      default:
+        return '';
+    }
   };
 
   const sizeStyles = {
@@ -33,7 +51,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       className={cn(
         baseStyles,
-        variantStyles[variant],
+        getVariantStyles(),
         sizeStyles[size],
         fullWidth && "w-full",
         className

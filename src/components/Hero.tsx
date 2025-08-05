@@ -4,11 +4,13 @@ import Button from './ui/Button';
 import SocialIcon from './ui/SocialIcon';
 import TypedText from './ui/TypedText';
 import { HeroData } from '../types';
+import { useAppContext } from '../context/AppContext';
 
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const buttonsRef = useRef<HTMLDivElement>(null);
+  const { isDarkMode } = useAppContext();
 
   const heroData: HeroData = {
     name: "Fras Khan",
@@ -51,32 +53,50 @@ const Hero: React.FC = () => {
   return (
     <section 
       ref={heroRef}
-      className="min-h-screen flex items-center justify-center bg-primary relative overflow-hidden"
+      className={`min-h-screen flex items-center justify-center relative overflow-hidden transition-colors duration-300 ${
+        isDarkMode ? 'bg-primary' : 'bg-primary-light'
+      }`}
     >
       {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary via-black-100 to-primary opacity-90" />
-      <div className="absolute top-20 right-20 w-72 h-72 bg-accent/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 left-20 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
+      <div className={`absolute inset-0 opacity-90 ${
+        isDarkMode 
+          ? 'bg-gradient-to-br from-primary via-black-100 to-primary'
+          : 'bg-gradient-to-br from-primary-light via-gray-100 to-primary-light'
+      }`} />
+      <div className={`absolute top-20 right-20 w-72 h-72 rounded-full blur-3xl ${
+        isDarkMode ? 'bg-accent/10' : 'bg-accent-light/10'
+      }`} />
+      <div className={`absolute bottom-20 left-20 w-96 h-96 rounded-full blur-3xl ${
+        isDarkMode ? 'bg-secondary/10' : 'bg-secondary-light/10'
+      }`} />
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div ref={textRef}>
           {/* Greeting */}
-          <p className="text-lg md:text-xl text-accent mb-4 font-medium">
+          <p className={`text-lg md:text-xl mb-4 font-medium ${
+            isDarkMode ? 'text-accent' : 'text-accent-light'
+          }`}>
             Hello, I'm
           </p>
           
           {/* Name */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white-100 mb-6 leading-tight">
+          <h1 className={`text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight ${
+            isDarkMode ? 'text-white-100' : 'text-gray-900'
+          }`}>
             {heroData.name}
           </h1>
           
           {/* Animated Titles */}
-          <div className="text-xl md:text-3xl text-secondary mb-8 h-12 flex items-center justify-center">
+          <div className={`text-xl md:text-3xl mb-8 h-12 flex items-center justify-center ${
+            isDarkMode ? 'text-secondary' : 'text-secondary-light'
+          }`}>
             <TypedText texts={heroData.titles} />
           </div>
           
           {/* Description */}
-          <p className="text-lg md:text-xl text-white-100/80 mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className={`text-lg md:text-xl mb-12 max-w-3xl mx-auto leading-relaxed ${
+            isDarkMode ? 'text-white-100/80' : 'text-gray-700'
+          }`}>
             {heroData.description}
           </p>
         </div>
@@ -126,8 +146,12 @@ const Hero: React.FC = () => {
         
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-soft">
-          <div className="w-6 h-10 border-2 border-white-100/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-accent rounded-full mt-2 animate-pulse" />
+          <div className={`w-6 h-10 border-2 rounded-full flex justify-center ${
+            isDarkMode ? 'border-white-100/30' : 'border-gray-600/30'
+          }`}>
+            <div className={`w-1 h-3 rounded-full mt-2 animate-pulse ${
+              isDarkMode ? 'bg-accent' : 'bg-accent-light'
+            }`} />
           </div>
         </div>
       </div>

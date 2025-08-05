@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-scroll';
 import { FaHeart, FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
+import { useAppContext } from '../context/AppContext';
 
 const Footer = () => {
+  const { isDarkMode } = useAppContext();
+  
   const navigationLinks = [
     { name: 'Home', to: 'home' },
     { name: 'About', to: 'about' },
@@ -18,11 +21,15 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-black-200 pt-10 pb-6">
+    <footer className={`pt-10 pb-6 transition-colors duration-300 ${
+      isDarkMode ? 'bg-black-200' : 'bg-gray-200'
+    }`}>
       <div className="container mx-auto px-4">
         {/* Quote */}
         <div className="text-center mb-8">
-          <p className="text-secondary italic max-w-xl mx-auto">
+          <p className={`italic max-w-xl mx-auto ${
+            isDarkMode ? 'text-secondary' : 'text-gray-600'
+          }`}>
             "Code is like humor. When you have to explain it, it's bad." – Cory House
           </p>
         </div>
@@ -37,7 +44,11 @@ const Footer = () => {
               smooth={true}
               offset={-70}
               duration={500}
-              className="text-secondary hover:text-white transition-colors cursor-pointer"
+              className={`transition-colors cursor-pointer ${
+                isDarkMode 
+                  ? 'text-secondary hover:text-white'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
             >
               {link.name}
             </Link>
@@ -53,7 +64,11 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={link.label}
-              className="text-secondary hover:text-blue-400 transition-all duration-300 transform hover:scale-110"
+              className={`transition-all duration-300 transform hover:scale-110 ${
+                isDarkMode 
+                  ? 'text-secondary hover:text-accent'
+                  : 'text-gray-600 hover:text-accent-light'
+              }`}
             >
               {link.icon}
             </a>
@@ -61,14 +76,20 @@ const Footer = () => {
         </div>
         
         {/* Divider */}
-        <div className="h-px bg-gray-800 my-6"></div>
+        <div className={`h-px my-6 ${
+          isDarkMode ? 'bg-gray-800' : 'bg-gray-400'
+        }`}></div>
         
         {/* Copyright */}
         <div className="text-center">
-          <p className="text-sm text-secondary">
+          <p className={`text-sm ${
+            isDarkMode ? 'text-secondary' : 'text-gray-600'
+          }`}>
             © {new Date().getFullYear()} Al-Fraskhan A. Jose. All rights reserved.
           </p>
-          <p className="text-xs text-secondary mt-2 flex items-center justify-center">
+          <p className={`text-xs mt-2 flex items-center justify-center ${
+            isDarkMode ? 'text-secondary' : 'text-gray-600'
+          }`}>
             Made with <FaHeart className="text-red-500 mx-1" size={12} /> as a BSIT student at Pilar College
           </p>
         </div>

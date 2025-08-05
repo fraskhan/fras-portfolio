@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '../../utils/cn';
+import { useAppContext } from '../../context/AppContext';
 
 interface SocialIconProps {
   href: string;
@@ -16,6 +17,8 @@ const SocialIcon: React.FC<SocialIconProps> = ({
   className,
   size = 'md' 
 }) => {
+  const { isDarkMode } = useAppContext();
+  
   const sizeStyles = {
     sm: 'w-8 h-8 text-sm',
     md: 'w-10 h-10 text-base',
@@ -38,9 +41,12 @@ const SocialIcon: React.FC<SocialIconProps> = ({
       aria-label={label}
       className={cn(
         'inline-flex items-center justify-center rounded-full transition-all duration-300',
-        'bg-white-100/10 backdrop-blur-sm border border-white-100/20',
-        'hover:bg-accent hover:border-accent hover:scale-110 hover:shadow-lg hover:shadow-accent/25',
-        'focus:outline-none focus:ring-2 focus:ring-accent/50',
+        isDarkMode 
+          ? 'bg-white-100/10 backdrop-blur-sm border border-white-100/20 hover:bg-accent hover:border-accent focus:ring-accent/50'
+          : 'bg-gray-100 backdrop-blur-sm border border-gray-300 hover:bg-accent-light hover:border-accent-light focus:ring-accent-light/50',
+        'hover:scale-110 hover:shadow-lg',
+        isDarkMode ? 'hover:shadow-accent/25' : 'hover:shadow-accent-light/25',
+        'focus:outline-none focus:ring-2',
         sizeStyles[size],
         className
       )}

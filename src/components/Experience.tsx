@@ -7,6 +7,7 @@ import {
   FaCertificate, 
   FaMapMarkerAlt
 } from 'react-icons/fa';
+import { useAppContext } from '../context/AppContext';
 
 // Enhanced types for the advanced experience component
 interface SkillProgress {
@@ -45,6 +46,8 @@ interface FilterState {
 type ViewMode = 'timeline' | 'grid' | 'compact';
 
 const Experience = () => {
+  const { isDarkMode } = useAppContext();
+  
   // State management for the advanced experience component
   const [activeFilter, setActiveFilter] = useState<FilterState>({
     type: 'all',
@@ -360,13 +363,19 @@ const Experience = () => {
     <section 
       ref={containerRef}
       id="experience" 
-      className="relative min-h-screen py-20 bg-gradient-to-br from-primary via-black-100 to-primary overflow-hidden"
+      className={`relative min-h-screen py-20 overflow-hidden transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-gradient-to-br from-primary via-black-100 to-primary'
+          : 'bg-gradient-to-br from-primary-light via-gray-100 to-primary-light'
+      }`}
       style={{ position: 'relative' }}
     >
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <motion.div
-          className="absolute top-20 left-10 w-72 h-72 bg-accent/10 rounded-full blur-3xl"
+          className={`absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl ${
+            isDarkMode ? 'bg-accent/10' : 'bg-accent-light/10'
+          }`}
           initial={{ scale: 1, opacity: 0.3 }}
           animate={{
             scale: [1, 1.2, 1],
@@ -379,7 +388,9 @@ const Experience = () => {
           }}
         />
         <motion.div
-          className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"
+          className={`absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl ${
+            isDarkMode ? 'bg-secondary/10' : 'bg-secondary-light/10'
+          }`}
           initial={{ scale: 1, opacity: 0.3 }}
           animate={{
             scale: [1, 1.1, 1],
@@ -405,28 +416,42 @@ const Experience = () => {
             initial={{ scale: 0 }}
             animate={isInView ? { scale: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.6, type: "spring" }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-accent/20 rounded-full border border-accent/30 mb-6"
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6 ${
+              isDarkMode 
+                ? 'bg-accent/20 border-accent/30' 
+                : 'bg-accent-light/20 border-accent-light/30'
+            }`}
             style={{ transformOrigin: 'center' }}
           >
-            <FaGraduationCap className="text-accent" />
-            <span className="text-accent font-medium text-sm">My Journey</span>
+            <FaGraduationCap className={isDarkMode ? 'text-accent' : 'text-accent-light'} />
+            <span className={`font-medium text-sm ${
+              isDarkMode ? 'text-accent' : 'text-accent-light'
+            }`}>My Journey</span>
           </motion.div>
           
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-4xl md:text-6xl font-bold text-white-100 leading-tight mb-6"
+            className={`text-4xl md:text-6xl font-bold leading-tight mb-6 ${
+              isDarkMode ? 'text-white-100' : 'text-gray-900'
+            }`}
           >
             Experience & 
-            <span className="text-transparent bg-gradient-to-r from-accent to-secondary bg-clip-text"> Education</span>
+            <span className={`text-transparent bg-clip-text ${
+              isDarkMode 
+                ? 'bg-gradient-to-r from-accent to-secondary'
+                : 'bg-gradient-to-r from-accent-light to-secondary-light'
+            }`}> Education</span>
           </motion.h2>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.6, duration: 0.8 }}
-            className="text-lg text-white-100/80 max-w-2xl mb-8"
+            className={`text-lg max-w-2xl mb-8 ${
+              isDarkMode ? 'text-white-100/80' : 'text-gray-700'
+            }`}
           >
             A comprehensive journey through professional development, academic achievements, 
             and continuous learning in technology and leadership.
@@ -436,7 +461,11 @@ const Experience = () => {
             initial={{ width: 0 }}
             animate={isInView ? { width: "100px" } : {}}
             transition={{ delay: 0.6, duration: 0.8 }}
-            className="h-1 bg-gradient-to-r from-accent to-secondary rounded mx-auto mb-6"
+            className={`h-1 rounded mx-auto mb-6 ${
+              isDarkMode 
+                ? 'bg-gradient-to-r from-accent to-secondary'
+                : 'bg-gradient-to-r from-accent-light to-secondary-light'
+            }`}
           />
         </motion.div>
 
@@ -447,7 +476,11 @@ const Experience = () => {
           transition={{ delay: 1, duration: 0.6 }}
           className="mb-12"
         >
-          <div className="bg-black-100/50 backdrop-blur-xl rounded-2xl border border-white-100/10 p-6">
+          <div className={`backdrop-blur-xl rounded-2xl border p-6 ${
+            isDarkMode 
+              ? 'bg-black-100/50 border-white-100/10'
+              : 'bg-white/50 border-gray-200'
+          }`}>
             <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
               
               {/* Filter Controls */}
