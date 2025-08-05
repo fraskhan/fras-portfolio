@@ -1,6 +1,7 @@
 import React from 'react';
 import { BadgeProps } from '../../types';
 import { cn } from '../../utils/cn';
+import { useAppContext } from '../../context/AppContext';
 
 const Badge: React.FC<BadgeProps> = ({
   children,
@@ -8,12 +9,26 @@ const Badge: React.FC<BadgeProps> = ({
   variant = 'default',
   size = 'md',
 }) => {
+  const { isDarkMode } = useAppContext();
   const baseStyles = "inline-flex items-center justify-center font-medium rounded-full transition-all duration-200";
   
-  const variantStyles = {
-    default: 'bg-accent text-primary',
-    outline: 'bg-transparent border border-accent text-accent',
-    subtle: 'bg-accent/20 text-accent',
+  const getVariantStyles = () => {
+    switch (variant) {
+      case 'default':
+        return isDarkMode 
+          ? 'bg-accent text-primary'
+          : 'bg-accent-light text-white';
+      case 'outline':
+        return isDarkMode
+          ? 'bg-transparent border border-accent text-accent'
+          : 'bg-transparent border border-accent-light text-accent-light';
+      case 'subtle':
+        return isDarkMode
+          ? 'bg-accent/20 text-accent'
+          : 'bg-accent-light/20 text-accent-light';
+      default:
+        return '';
+    }
   };
   
   const sizeStyles = {
@@ -26,7 +41,7 @@ const Badge: React.FC<BadgeProps> = ({
     <span 
       className={cn(
         baseStyles,
-        variantStyles[variant],
+        getVariantStyles(),
         sizeStyles[size],
         className
       )}

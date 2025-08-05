@@ -490,7 +490,11 @@ const Experience = () => {
                   <select
                     value={activeFilter.type}
                     onChange={(e) => handleFilterChange('type', e.target.value)}
-                    className="bg-primary/50 border border-white-100/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-accent transition-colors"
+                    className={`rounded-lg px-3 py-2 text-sm focus:outline-none transition-colors ${
+                      isDarkMode 
+                        ? 'bg-primary/50 border border-white-100/20 text-white focus:border-accent'
+                        : 'bg-white/80 border border-gray-300 text-gray-800 focus:border-accent-light'
+                    }`}
                   >
                     <option value="all">All Types</option>
                     <option value="experience">Experience</option>
@@ -503,7 +507,11 @@ const Experience = () => {
                 <select
                   value={activeFilter.category}
                   onChange={(e) => handleFilterChange('category', e.target.value)}
-                  className="bg-primary/50 border border-white-100/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-accent transition-colors"
+                  className={`rounded-lg px-3 py-2 text-sm focus:outline-none transition-colors ${
+                    isDarkMode 
+                      ? 'bg-primary/50 border border-white-100/20 text-white focus:border-accent'
+                      : 'bg-white/80 border border-gray-300 text-gray-800 focus:border-accent-light'
+                  }`}
                 >
                   {categories.map(category => (
                     <option key={category} value={category}>
@@ -516,7 +524,11 @@ const Experience = () => {
                 <select
                   value={activeFilter.timeRange}
                   onChange={(e) => handleFilterChange('timeRange', e.target.value)}
-                  className="bg-primary/50 border border-white-100/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-accent transition-colors"
+                  className={`rounded-lg px-3 py-2 text-sm focus:outline-none transition-colors ${
+                    isDarkMode 
+                      ? 'bg-primary/50 border border-white-100/20 text-white focus:border-accent'
+                      : 'bg-white/80 border border-gray-300 text-gray-800 focus:border-accent-light'
+                  }`}
                 >
                   <option value="all">All Time</option>
                   <option value="recent">Recent (2022+)</option>
@@ -525,15 +537,21 @@ const Experience = () => {
               </div>
 
               {/* View Mode Controls */}
-              <div className="flex items-center gap-2 bg-primary/30 rounded-lg p-1">
+              <div className={`flex items-center gap-2 rounded-lg p-1 ${
+                isDarkMode ? 'bg-primary/30' : 'bg-gray-200/50'
+              }`}>
                 {(['timeline', 'grid', 'compact'] as const).map(mode => (
                   <motion.button
                     key={mode}
                     onClick={() => handleViewModeChange(mode)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
                       viewMode === mode 
-                        ? 'bg-accent text-primary shadow-lg' 
-                        : 'bg-white-100/10 text-white-100 hover:bg-white-100/20'
+                        ? isDarkMode 
+                          ? 'bg-accent text-primary shadow-lg' 
+                          : 'bg-accent-light text-white shadow-lg'
+                        : isDarkMode
+                          ? 'bg-white-100/10 text-white-100 hover:bg-white-100/20'
+                          : 'bg-gray-300/50 text-gray-700 hover:bg-gray-300/80'
                     }`}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -555,7 +573,9 @@ const Experience = () => {
             </div>
 
             {/* Results Summary */}
-            <div className="mt-4 flex items-center justify-between text-sm text-white-100/60">
+            <div className={`mt-4 flex items-center justify-between text-sm ${
+              isDarkMode ? 'text-white-100/60' : 'text-gray-600'
+            }`}>
               <span>
                 Showing {paginatedItems.length} of {filteredItems.length} items
               </span>
@@ -603,7 +623,11 @@ const Experience = () => {
                   className={`flex items-center gap-8 ${index % 2 === 0 ? '' : 'flex-row-reverse'}`}
                 >
                   {/* Content Card */}
-                  <div className="flex-1 bg-white-100/5 backdrop-blur-lg border border-white-100/10 rounded-xl p-6 hover:bg-white-100/10 transition-all duration-300">
+                  <div className={`flex-1 backdrop-blur-lg border rounded-xl p-6 transition-all duration-300 ${
+                    isDarkMode 
+                      ? 'bg-white-100/5 border-white-100/10 hover:bg-white-100/10'
+                      : 'bg-white/80 border-gray-200 hover:bg-white/90'
+                  }`}>
                     <div className="flex items-start gap-4">
                       <div 
                         className="p-3 rounded-full flex-shrink-0"
@@ -612,31 +636,49 @@ const Experience = () => {
                         {item.icon}
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-white-100 mb-2">{item.title}</h3>
-                        <p className="text-accent font-medium mb-2">{item.organization}</p>
-                        <div className="flex items-center gap-4 text-sm text-white-100/70 mb-4">
+                        <h3 className={`text-xl font-bold mb-2 ${
+                          isDarkMode ? 'text-white-100' : 'text-gray-900'
+                        }`}>{item.title}</h3>
+                        <p className={`font-medium mb-2 ${
+                          isDarkMode ? 'text-accent' : 'text-accent-light'
+                        }`}>{item.organization}</p>
+                        <div className={`flex items-center gap-4 text-sm mb-4 ${
+                          isDarkMode ? 'text-white-100/70' : 'text-gray-600'
+                        }`}>
                           <span>{item.date}{item.endDate && ` - ${item.endDate}`}</span>
                           <span>📍 {item.location}</span>
                         </div>
                         <div className="space-y-2 mb-4">
                           {Array.isArray(item.description) 
                             ? item.description.map((desc: string, i: number) => (
-                                <p key={i} className="text-white-100/80 text-sm leading-relaxed">• {desc}</p>
+                                <p key={i} className={`text-sm leading-relaxed ${
+                                  isDarkMode ? 'text-white-100/80' : 'text-gray-700'
+                                }`}>• {desc}</p>
                               ))
-                            : <p className="text-white-100/80 text-sm leading-relaxed">• {item.description}</p>
+                            : <p className={`text-sm leading-relaxed ${
+                              isDarkMode ? 'text-white-100/80' : 'text-gray-700'
+                            }`}>• {item.description}</p>
                           }
                         </div>
                         {item.achievements && (
                           <div className="mb-4">
-                            <h4 className="text-white-100 font-semibold mb-2">Key Achievements:</h4>
+                            <h4 className={`font-semibold mb-2 ${
+                              isDarkMode ? 'text-white-100' : 'text-gray-900'
+                            }`}>Key Achievements:</h4>
                             {item.achievements.map((achievement: string, i: number) => (
-                              <p key={i} className="text-accent text-sm">🏆 {achievement}</p>
+                              <p key={i} className={`text-sm ${
+                                isDarkMode ? 'text-accent' : 'text-accent-light'
+                              }`}>🏆 {achievement}</p>
                             ))}
                           </div>
                         )}
                         <div className="flex flex-wrap gap-2">
                           {item.tags?.map((tag: string, i: number) => (
-                            <span key={i} className="px-3 py-1 bg-accent/20 text-accent text-xs rounded-full">
+                            <span key={i} className={`px-3 py-1 text-xs rounded-full ${
+                              isDarkMode 
+                                ? 'bg-accent/20 text-accent'
+                                : 'bg-accent-light/20 text-accent-light'
+                            }`}>
                               {tag}
                             </span>
                           )) || []}
@@ -646,7 +688,11 @@ const Experience = () => {
                   </div>
                   
                   {/* Timeline Line */}
-                  <div className="w-1 h-full bg-gradient-to-b from-accent to-secondary rounded-full min-h-[100px]"></div>
+                  <div className={`w-1 h-full rounded-full min-h-[100px] ${
+                    isDarkMode 
+                      ? 'bg-gradient-to-b from-accent to-secondary'
+                      : 'bg-gradient-to-b from-accent-light to-secondary-light'
+                  }`}></div>
                 </motion.div>
               ))}
             </div>
@@ -661,7 +707,11 @@ const Experience = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.6 }}
-                  className="bg-white-100/5 backdrop-blur-lg border border-white-100/10 rounded-xl p-6 hover:bg-white-100/10 hover:scale-105 transition-all duration-300"
+                  className={`backdrop-blur-lg border rounded-xl p-6 hover:scale-105 transition-all duration-300 ${
+                    isDarkMode 
+                      ? 'bg-white-100/5 border-white-100/10 hover:bg-white-100/10'
+                      : 'bg-white/80 border-gray-200 hover:bg-white/90'
+                  }`}
                 >
                   <div 
                     className="p-3 rounded-full w-fit mb-4"
@@ -669,23 +719,37 @@ const Experience = () => {
                   >
                     {item.icon}
                   </div>
-                  <h3 className="text-lg font-bold text-white-100 mb-2">{item.title}</h3>
-                  <p className="text-accent font-medium mb-2">{item.organization}</p>
-                  <div className="text-sm text-white-100/70 mb-4">
+                  <h3 className={`text-lg font-bold mb-2 ${
+                    isDarkMode ? 'text-white-100' : 'text-gray-900'
+                  }`}>{item.title}</h3>
+                  <p className={`font-medium mb-2 ${
+                    isDarkMode ? 'text-accent' : 'text-accent-light'
+                  }`}>{item.organization}</p>
+                  <div className={`text-sm mb-4 ${
+                    isDarkMode ? 'text-white-100/70' : 'text-gray-600'
+                  }`}>
                     <p>{item.date}{item.endDate && ` - ${item.endDate}`}</p>
                     <p>📍 {item.location}</p>
                   </div>
                   <div className="space-y-1 mb-4">
                     {Array.isArray(item.description) 
                       ? item.description.slice(0, 2).map((desc: string, i: number) => (
-                          <p key={i} className="text-white-100/80 text-sm">• {desc}</p>
+                          <p key={i} className={`text-sm ${
+                            isDarkMode ? 'text-white-100/80' : 'text-gray-700'
+                          }`}>• {desc}</p>
                         ))
-                      : <p className="text-white-100/80 text-sm">• {item.description}</p>
+                      : <p className={`text-sm ${
+                        isDarkMode ? 'text-white-100/80' : 'text-gray-700'
+                      }`}>• {item.description}</p>
                     }
                   </div>
                   <div className="flex flex-wrap gap-1">
                     {item.tags?.slice(0, 3).map((tag: string, i: number) => (
-                      <span key={i} className="px-2 py-1 bg-accent/20 text-accent text-xs rounded-full">
+                      <span key={i} className={`px-2 py-1 text-xs rounded-full ${
+                        isDarkMode 
+                          ? 'bg-accent/20 text-accent'
+                          : 'bg-accent-light/20 text-accent-light'
+                      }`}>
                         {tag}
                       </span>
                     )) || []}
@@ -704,7 +768,11 @@ const Experience = () => {
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05, duration: 0.4 }}
-                  className="bg-white-100/5 backdrop-blur-lg border border-white-100/10 rounded-lg p-4 hover:bg-white-100/10 transition-all duration-300"
+                  className={`backdrop-blur-lg border rounded-lg p-4 transition-all duration-300 ${
+                    isDarkMode 
+                      ? 'bg-white-100/5 border-white-100/10 hover:bg-white-100/10'
+                      : 'bg-white/80 border-gray-200 hover:bg-white/90'
+                  }`}
                 >
                   <div className="flex items-center gap-4">
                     <div 
@@ -714,10 +782,16 @@ const Experience = () => {
                       {item.icon}
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-white-100">{item.title}</h3>
-                      <p className="text-accent text-sm">{item.organization}</p>
+                      <h3 className={`text-lg font-bold ${
+                        isDarkMode ? 'text-white-100' : 'text-gray-900'
+                      }`}>{item.title}</h3>
+                      <p className={`text-sm ${
+                        isDarkMode ? 'text-accent' : 'text-accent-light'
+                      }`}>{item.organization}</p>
                     </div>
-                    <div className="text-right text-sm text-white-100/70">
+                    <div className={`text-right text-sm ${
+                      isDarkMode ? 'text-white-100/70' : 'text-gray-600'
+                    }`}>
                       <p>{item.date}{item.endDate && ` - ${item.endDate}`}</p>
                       <p>{item.location}</p>
                     </div>

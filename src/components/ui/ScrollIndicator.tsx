@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-scroll';
 import { gsap } from 'gsap';
+import { useAppContext } from '../../context/AppContext';
 
 interface ScrollIndicatorProps {
   targetId: string;
@@ -8,6 +9,8 @@ interface ScrollIndicatorProps {
 }
 
 const ScrollIndicator = ({ targetId, className = '' }: ScrollIndicatorProps) => {
+  const { isDarkMode } = useAppContext();
+  
   useEffect(() => {
     // Setup scroll animation for the scroll indicator
     const animation = gsap.to('.scroll-indicator-dot', {
@@ -33,8 +36,12 @@ const ScrollIndicator = ({ targetId, className = '' }: ScrollIndicatorProps) => 
         duration={500}
         className="cursor-pointer"
       >
-        <div className="w-7 h-12 rounded-full border-2 border-[var(--secondary-color)] flex justify-center items-start p-1">
-          <div className="scroll-indicator-dot w-2 h-3 bg-[var(--accent-color)] rounded-full" />
+        <div className={`w-7 h-12 rounded-full border-2 flex justify-center items-start p-1 ${
+          isDarkMode ? 'border-secondary' : 'border-secondary-light'
+        }`}>
+          <div className={`scroll-indicator-dot w-2 h-3 rounded-full ${
+            isDarkMode ? 'bg-accent' : 'bg-accent-light'
+          }`} />
         </div>
       </Link>
     </div>
