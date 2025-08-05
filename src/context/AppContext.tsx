@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface AppContextType {
   // Navigation
@@ -62,7 +62,22 @@ interface AppProviderProps {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   const [activeSection, setActiveSection] = useState<string>('home');
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    // Check localStorage for saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme ? savedTheme === 'dark' : true; // Default to dark mode
+  });
+  
+  // Apply dark mode class to document element
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    // Save theme preference to localStorage
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
   
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
@@ -74,7 +89,6 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   
   const toggleDarkMode = () => {
     setIsDarkMode(prev => !prev);
-    // Add logic to change theme if needed
   };
   
   // Value object to be passed to provider

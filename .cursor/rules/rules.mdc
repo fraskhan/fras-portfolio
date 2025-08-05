@@ -5,4 +5,4 @@ read_file: Read the contents of a file
 grep_search: Search in the codebase based on a specific creator
 list_dir: Get a list of files and folders in a specific directory”
 
-Please edit the file in small chunks
+Please edit the file in small chunkss

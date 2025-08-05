@@ -8,16 +8,16 @@ import Experience from './components/Experience';
 import Certifications from './components/Certifications';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import ChatWindow from './components/ui/ChatWindow';
+import { AppProvider, useAppContext } from './context/AppContext';
 
 import AOS from 'aos';
 import { gsap } from 'gsap';
 import './index.css'; // Explicitly import CSS
 
-function App() {
+const AppContent = () => {
   const appRef = useRef<HTMLDivElement>(null);
-  
-  // State for section visibility (for triggering animations)
-  const [activeSection, setActiveSection] = useState<string>('home');
+  const { isDarkMode, activeSection, setActiveSection } = useAppContext();
   
   // Function to handle section changes
   const handleSectionChange = (section: string) => {
@@ -84,7 +84,9 @@ function App() {
   return (
     <div
       ref={appRef}
-      className="relative z-0 bg-primary"
+      className={`relative z-0 transition-colors duration-300 ${
+        isDarkMode ? 'dark bg-primary' : 'bg-primary-light'
+      }`}
       style={{ opacity: 0 }} // Initial state before GSAP animation
     >
 
@@ -103,10 +105,21 @@ function App() {
       <Contact />
       <Footer />
       
+      {/* Chat Window */}
+      <ChatWindow />
+      
       {/* Global decorative elements */}
       <div className="fixed top-[10%] left-[-10%] w-72 h-72 rounded-full bg-secondary/5 blur-3xl z-[-1]"></div>
       <div className="fixed bottom-[20%] right-[-5%] w-80 h-80 rounded-full bg-accent/5 blur-3xl z-[-1]"></div>
     </div>
+  );
+};
+
+function App() {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
   );
 }
 

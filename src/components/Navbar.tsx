@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-scroll';
 import { motion } from 'framer-motion';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { useAppContext } from '../context/AppContext';
 
 const navLinks = [
   { name: 'Home', to: 'home' },
@@ -24,6 +25,7 @@ const Navbar = ({
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [internalActiveSection, setInternalActiveSection] = useState('home');
+  const { isDarkMode, toggleDarkMode } = useAppContext();
   
   // Use external active section if provided, otherwise use internal state
   const activeSection = externalActiveSection || internalActiveSection;
@@ -103,7 +105,9 @@ const Navbar = ({
       animate="visible"
       variants={navbarVariants}
       className={`fixed w-full z-20 top-0 left-0 transition-all duration-300 ${
-        scrolled ? 'bg-black-200/90 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.1)] py-2' : 'bg-transparent py-4'
+        scrolled 
+          ? `${isDarkMode ? 'bg-black-200/90' : 'bg-white/90'} backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.1)] py-2` 
+          : 'bg-transparent py-4'
       }`}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
@@ -122,14 +126,14 @@ const Navbar = ({
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
             <span className="text-2xl font-bold">
-              <span className="text-accent">AL</span>
-              <span className="text-white-100">-FRASKHAN</span>
+              <span className={isDarkMode ? "text-accent" : "text-accent-light"}>AL</span>
+              <span className={isDarkMode ? "text-white-100" : "text-gray-800"}>-FRASKHAN</span>
             </span>
           </motion.div>
         </Link>
 
         {/* Desktop Navigation */}
-        <motion.div className="hidden md:flex space-x-8">
+        <motion.div className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (
             <motion.div
               key={link.name}
@@ -144,14 +148,18 @@ const Navbar = ({
                 smooth={true}
                 offset={-70}
                 duration={500}
-                className={`text-white-100 hover:text-accent transition-colors cursor-pointer px-2 py-1 relative`}
+                className={`${
+                  isDarkMode ? 'text-white-100 hover:text-accent' : 'text-gray-800 hover:text-accent-light'
+                } transition-colors cursor-pointer px-2 py-1 relative`}
                 onClick={() => handleSectionClick(link.to)}
               >
                 {link.name}
                 {activeSection === link.to && (
                   <motion.div 
                     layoutId="underline"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent" 
+                    className={`absolute bottom-0 left-0 right-0 h-0.5 ${
+                      isDarkMode ? 'bg-accent' : 'bg-accent-light'
+                    }`}
                     initial={false}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
@@ -159,16 +167,47 @@ const Navbar = ({
               </Link>
             </motion.div>
           ))}
+          
+          {/* Theme Toggle Button */}
+          <motion.button
+            onClick={toggleDarkMode}
+            className={`p-2 rounded-full transition-colors ${
+              isDarkMode 
+                ? 'text-white-100 hover:text-accent hover:bg-accent/10' 
+                : 'text-gray-800 hover:text-accent-light hover:bg-accent-light/10'
+            }`}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            aria-label="Toggle theme"
+          >
+            <span className="text-lg">{isDarkMode ? '☀️' : '🌙'}</span>
+          </motion.button>
         </motion.div>
 
-        {/* Mobile Navigation Button */}
+        {/* Mobile Navigation Button and Theme Toggle */}
         <motion.div 
-          className="md:hidden flex items-center"
+          className="md:hidden flex items-center space-x-2"
           whileTap={{ scale: 0.9 }}
         >
+          {/* Mobile Theme Toggle */}
+          <motion.button
+            onClick={toggleDarkMode}
+            className={`p-2 rounded-full transition-colors ${
+              isDarkMode 
+                ? 'text-white-100 hover:text-accent hover:bg-accent/10' 
+                : 'text-gray-800 hover:text-accent-light hover:bg-accent-light/10'
+            }`}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            aria-label="Toggle theme"
+          >
+            <span className="text-base">{isDarkMode ? '☀️' : '🌙'}</span>
+          </motion.button>
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
-            className="text-white-100 focus:outline-none"
+            className={`${isDarkMode ? 'text-white-100' : 'text-gray-800'} focus:outline-none`}
             whileHover={{ scale: 1.1 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
             aria-label="menu"
@@ -181,7 +220,7 @@ const Navbar = ({
                 exit={{ rotate: 90, opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <FaTimes className="h-6 w-6 text-accent" />
+                <FaTimes className={`h-6 w-6 ${isDarkMode ? 'text-accent' : 'text-accent-light'}`} />
               </motion.div>
             ) : (
               <motion.div
@@ -204,7 +243,9 @@ const Navbar = ({
           variants={mobileMenuVariants}
           initial="closed"
           animate="open"
-          className="md:hidden bg-black-100/95 backdrop-blur-md overflow-hidden border-t border-secondary/20"
+          className={`md:hidden ${
+            isDarkMode ? 'bg-black-100/95 border-secondary/20' : 'bg-white/95 border-gray-200'
+          } backdrop-blur-md overflow-hidden border-t`}
         >
           <motion.div 
             className="container mx-auto px-4 py-4 flex flex-col space-y-4"
@@ -228,8 +269,8 @@ const Navbar = ({
                   duration={500}
                   className={`block text-lg py-2 px-3 rounded-md transition-colors cursor-pointer ${
                     activeSection === link.to
-                      ? 'text-accent bg-accent/10'
-                      : 'text-white-100 hover:text-accent'
+                      ? `${isDarkMode ? 'text-accent bg-accent/10' : 'text-accent-light bg-accent-light/10'}`
+                      : `${isDarkMode ? 'text-white-100 hover:text-accent' : 'text-gray-800 hover:text-accent-light'}`
                   }`}
                   onClick={() => handleSectionClick(link.to)}
                 >
